@@ -29,7 +29,7 @@
             <div>
                 <h4 class="text-lg font-semibold mb-4 tracking-wider uppercase">Informasi</h4>
                 <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-400 hover:text-white">Syarat & Ketentuan</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Syarat dan Ketentuan</a></li>
                     <li><a href="#" class="text-gray-400 hover:text-white">Kebijakan Privasi</a></li>
                 </ul>
             </div>

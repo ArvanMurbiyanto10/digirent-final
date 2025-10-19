@@ -40,7 +40,7 @@
                             {{-- ... (Badge Kategori & Stok) ... --}}
                         </div>
                         <div class="p-5 flex flex-col">
-                             <h3 class="text-lg font-bold text-gray-800 truncate group-hover:text-purple-600 transition-colors duration-300">{{ $product->name }}</h3>
+                                <h3 class="text-lg font-bold text-gray-800 truncate group-hover:text-purple-600 transition-colors duration-300">{{ $product->name }}</h3>
                             <p class="text-sm text-gray-500 mt-1 h-10">{{ Str::limit($product->description, 50) }}</p>
                             <div class="mt-4 pt-4 border-t border-gray-100">
                                 <span class="text-2xl font-bold text-gray-900">Rp {{ number_format($product->price_per_day) }}</span>

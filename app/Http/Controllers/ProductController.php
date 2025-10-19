@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers; // Pastikan namespace-nya BENAR
 
 use App\Models\Product;
 use App\Models\Category;
@@ -15,13 +15,10 @@ class ProductController extends Controller
         return view('products.index', compact('products', 'categories'));
     }
 
-    /**
-     * TAMBAHKAN METHOD INI
-     * Menampilkan halaman detail untuk satu produk.
-     */
     public function show(Product $product)
     {
-        // $product sudah otomatis diambil dari database berdasarkan slug di URL
+        // The $product variable is automatically fetched from the database
+        // based on the slug in the URL.
         return view('products.show', compact('product'));
     }
 }

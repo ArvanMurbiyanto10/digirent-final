@@ -4,31 +4,27 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
         <title>{{ config('app.name', 'Laravel') }}</title>
-
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-        {{-- Slot untuk menampung style kustom dari halaman anak --}}
         @stack('styles')
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-white">
+        {{-- MODIFIKASI: Tambahkan 'flex flex-col' untuk layout vertikal --}}
+        <div class="min-h-screen bg-white flex flex-col">
             @include('layouts.navigation')
 
             @isset($header)
-                <header class="bg-white shadow">
+                <header class="bg-gray-100 shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
             @endisset
 
-            <main>
-                {{-- Logika untuk menampilkan konten dari @section atau <x-slot> --}}
+            {{-- MODIFIKASI: Tambahkan 'flex-grow' agar area ini mengisi sisa ruang --}}
+            <main class="flex-grow">
                 @if (isset($slot))
                     {{ $slot }}
                 @else
@@ -36,12 +32,9 @@
                 @endif
             </main>
 
-            {{-- TAMBAHKAN FOOTER DI SINI --}}
             @include('layouts.footer')
-
         </div>
 
-        {{-- Slot untuk menampung script kustom dari halaman anak --}}
         @stack('scripts')
     </body>
 </html>

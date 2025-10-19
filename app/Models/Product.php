@@ -9,22 +9,20 @@ class Product extends Model
 {
     use HasFactory;
 
+    // Menggunakan guarded agar lebih fleksibel saat menambah kolom baru
+    protected $guarded = ['id'];
+
     /**
-     * BARU: Tambahkan properti ini.
-     * Atribut yang diizinkan untuk diisi secara massal.
+     * PERBAIKAN: Beritahu Laravel cara menangani kolom 'specifications'.
+     *
+     * @var array
      */
-    protected $fillable = [
-        'category_id',
-        'name',
-        'slug',
-        'description',
-        'image',
-        'price_per_day',
-        'stock',
+    protected $casts = [
+        'specifications' => 'array',
     ];
 
     /**
-     * Mendefinisikan relasi bahwa produk ini milik satu kategori.
+     * Relasi ke model Category.
      */
     public function category()
     {

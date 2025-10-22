@@ -10,7 +10,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
-
+use App\Http\Controllers\Admin\NewsItemController; // <-- TAMBAHKAN INI
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +20,7 @@ use App\Http\Controllers\Admin\AdminController;
 
 // == RUTE PUBLIK ==
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/products', [ProductController::class, 'index'])->name('products.index'); // <-- INI YANG HILANG
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/syarat-ketentuan', [PageController::class, 'terms'])->name('terms.show');
 Route::get('/kebijakan-privasi', [PageController::class, 'privacy'])->name('privacy.show');
@@ -48,6 +48,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::patch('/bookings/{booking}/confirm', [AdminController::class, 'confirmBooking'])->name('bookings.confirm');
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
+
+    // == [TAMBAHKAN RUTE INI] ==
+    Route::resource('news-items', NewsItemController::class);
 });
 
 

@@ -12,14 +12,23 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
+
+    // == [INI LANGKAH 7] ==
+    // Rute registrasi manual dinonaktifkan agar hanya bisa via Google
+    /*
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
     Route::post('register', [RegisteredUserController::class, 'store']);
+    */
+    // ======================
+
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
+    // Rute post login ini BISA DIHAPUS, karena kita tidak punya form login manual.
+    // Tapi biarkan saja juga tidak apa-apa, karena tidak akan terpakai.
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])

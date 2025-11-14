@@ -23,7 +23,7 @@ class MainSeeder extends Seeder
         // 1. Buat User Admin
         User::create([
             'name' => 'Admin DigiRent',
-            'email' => 'admin@digirent.com',
+            'email' => 'arvan12aa@gmail.com',
             'password' => Hash::make('password'),
             'role' => 'admin',
         ]);

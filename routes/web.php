@@ -10,7 +10,10 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\NewsItemController; // <-- TAMBAHKAN INI
+use App\Http\Controllers\Admin\NewsItemController;
+
+// [INI YANG DIPERBAIKI] Import controller untuk Google Auth
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,10 +52,20 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('/bookings/{booking}/confirm', [AdminController::class, 'confirmBooking'])->name('bookings.confirm');
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
 
-    // == [TAMBAHKAN RUTE INI] ==
+    // Rute News Item
     Route::resource('news-items', NewsItemController::class);
 });
 
 
+// == [RUTE GOOGLE DITARUH DI SINI] ==
+// Rute untuk Google Auth
+Route::get('/auth/google/redirect', [AuthenticatedSessionController::class, 'redirectToGoogle'])
+    ->name('auth.google.redirect');
+
+Route::get('/auth/google/callback', [AuthenticatedSessionController::class, 'handleGoogleCallback'])
+    ->name('auth.google.callback');
+
+
 // File rute autentikasi bawaan dari Breeze
+// PASTIKAN INI SELALU ADA DI BARIS PALING AKHIR
 require __DIR__ . '/auth.php';

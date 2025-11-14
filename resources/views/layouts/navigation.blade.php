@@ -83,8 +83,12 @@
                 @else
                     {{-- Tombol Login/Register --}}
                     <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900">Log in</a>
+
+                    {{--
+                      [DIHAPUS] Link Register yang menyebabkan error
                     <a href="{{ route('register') }}"
                         class="ms-4 font-semibold text-gray-600 hover:text-gray-900">Register</a>
+                    --}}
                 @endauth
             </div>
 
@@ -153,7 +157,11 @@
             @else
                 <div class="pt-2 pb-3 space-y-1">
                     <x-responsive-nav-link :href="route('login')">{{ __('Log In') }}</x-responsive-nav-link>
+
+                    {{--
+                      [DIHAPUS] Link Register yang menyebabkan error
                     <x-responsive-nav-link :href="route('register')">{{ __('Register') }}</x-responsive-nav-link>
+                    --}}
                 </div>
             @endauth
         </div>

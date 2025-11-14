@@ -85,7 +85,7 @@
                     <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900">Log in</a>
 
                     {{--
-                      [DIHAPUS] Link Register yang menyebabkan error
+                        [DIHAPUS] Link Register yang menyebabkan error
                     <a href="{{ route('register') }}"
                         class="ms-4 font-semibold text-gray-600 hover:text-gray-900">Register</a>
                     --}}
@@ -131,12 +131,12 @@
                         <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                             {{ __('Kelola Pesanan') }}
                         </x-responsive-nav-link>
-                         <x-responsive-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
+                        <x-responsive-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
                             {{ __('Kelola Produk') }}
                         </x-responsive-nav-link>
                         {{-- =================================== --}}
                         {{-- == [TAMBAHKAN JUGA DI SINI] == --}}
-                         <x-responsive-nav-link :href="route('admin.news-items.index')" :active="request()->routeIs('admin.news-items.*')">
+                        <x-responsive-nav-link :href="route('admin.news-items.index')" :active="request()->routeIs('admin.news-items.*')">
                             {{ __('Kelola Berita') }}
                         </x-responsive-nav-link>
                         {{-- =================================== --}}
@@ -159,7 +159,7 @@
                     <x-responsive-nav-link :href="route('login')">{{ __('Log In') }}</x-responsive-nav-link>
 
                     {{--
-                      [DIHAPUS] Link Register yang menyebabkan error
+                        [DIHAPUS] Link Register yang menyebabkan error
                     <x-responsive-nav-link :href="route('register')">{{ __('Register') }}</x-responsive-nav-link>
                     --}}
                 </div>

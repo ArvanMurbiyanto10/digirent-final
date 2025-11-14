@@ -69,6 +69,7 @@
       payButton.addEventListener('click', function () {
         window.snap.pay('{{ $snapToken }}', {
           onSuccess: function(result){
+            // INI ADALAH BAGIAN YANG MEMPERBAIKINYA
             window.location.href = '{{ route("booking.success", $booking) }}';
           },
           onPending: function(result){

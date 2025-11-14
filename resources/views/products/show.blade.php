@@ -33,7 +33,26 @@
                             <div>
                                 {{-- MODIFIKASI: Warna harga diubah menjadi ungu --}}
                                 <p class="text-3xl font-bold text-purple-600">Rp {{ number_format($product->price_per_day) }}</p>
-                                <p class="text-sm text-gray-500">per hari</p>
+
+                                <p class="text-sm text-gray-500 mb-2">per hari</p>
+
+                                {{-- KODE STATUS KETERSEDIAAN --}}
+                                @if($product->stock > 0)
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                            <path clip-rule="evenodd" fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16Zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path>
+                                        </svg>
+                                        Tersedia
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                            <path clip-rule="evenodd" fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"></path>
+                                        </svg>
+                                        Stok Kosong
+                                    </span>
+                                @endif
+                                {{-- BATAS KODE STATUS --}}
                             </div>
                         </div>
                     </div>
@@ -46,18 +65,31 @@
                         </ul>
                     </div>
 
+                    {{--
+                      MODIFIKASI LOGIKA TOMBOL SEWA
+                      Kita tambahkan pengecekan untuk role admin
+                    --}}
                     <div class="mt-10">
-                        @if($product->stock > 0)
-                            {{-- MODIFIKASI: Warna tombol diubah menjadi ungu --}}
-                            <a href="{{ route('booking.create', $product) }}" class="w-full block text-center bg-purple-600 text-white text-lg font-bold py-4 rounded-lg shadow-md hover:bg-purple-700 transition-colors duration-300">
-                                Sewa Sekarang
-                            </a>
-                        @else
+                        @if($product->stock <= 0)
+                            {{-- 1. Jika Stok Habis, tombol mati untuk semua --}}
                             <button class="w-full block text-center bg-gray-400 text-white text-lg font-semibold py-4 rounded-lg cursor-not-allowed" disabled>
                                 Stok Habis
                             </button>
+                        @elseif(auth()->check() && auth()->user()->role == 'admin')
+                            {{-- 2. Jika Stok Ada, TAPI user adalah admin, tombol mati --}}
+                            <button class="w-full block text-center bg-purple-300 text-white text-lg font-bold py-4 rounded-lg cursor-not-allowed"
+                                    disabled title="Admin tidak dapat melakukan pemesanan">
+                                Admin Tidak Bisa Memesan
+                            </button>
+                        @else
+                            {{-- 3. Jika Stok Ada & user BUKAN admin (atau guest), tombol aktif --}}
+                            <a href="{{ route('booking.create', $product) }}" class="w-full block text-center bg-purple-600 text-white text-lg font-bold py-4 rounded-lg shadow-md hover:bg-purple-700 transition-colors duration-300">
+                                Sewa Sekarang
+                            </a>
                         @endif
                     </div>
+                    {{-- BATAS MODIFIKASI --}}
+
                 </div>
             </div>
 

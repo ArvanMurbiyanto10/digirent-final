@@ -50,12 +50,23 @@
                     </div>
 
                     {{-- Tombol Aksi --}}
-                    <div class="text-center space-y-4 md:space-y-0 md:space-x-4">
+                    {{-- MODIFIKASI: Mengganti div container dengan flex-wrap dan gap --}}
+                    <div class="text-center flex flex-wrap justify-center gap-4">
                         <a href="{{ route('booking.downloadInvoice', $booking) }}" class="w-full md:w-auto inline-block bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors">
                             Cetak Struk (PDF)
                         </a>
                         <a href="{{ $whatsappLink }}" target="_blank" class="w-full md:w-auto inline-block bg-green-500 text-white font-semibold py-3 px-8 rounded-lg hover:bg-green-600 transition-colors">
                             Lanjutkan via WhatsApp
+                        </a>
+
+                        {{-- KODE TAMBAHAN 1: Dashboard Pesanan --}}
+                        <a href="{{ route('dashboard') }}" class="w-full md:w-auto inline-block bg-indigo-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-indigo-700 transition-colors">
+                            Dashboard Pesanan
+                        </a>
+
+                        {{-- KODE TAMBAHAN 2: Kembali ke Home --}}
+                        <a href="{{ route('home') }}" class="w-full md:w-auto inline-block bg-gray-200 text-gray-800 font-semibold py-3 px-8 rounded-lg hover:bg-gray-300 transition-colors">
+                            Kembali ke Home
                         </a>
                     </div>
 

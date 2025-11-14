@@ -42,6 +42,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/sewa/{product:slug}', [BookingController::class, 'create'])->name('booking.create');
     Route::post('/sewa', [BookingController::class, 'store'])->name('booking.store');
     Route::get('/pesanan/{booking}', [BookingController::class, 'show'])->name('booking.show');
+
+    // TAMBAHKAN RUTE INI (PASTIKAN MENGGUNAKAN BookingController DENGAN 1 'n')
+    Route::post('/booking/checkout', [BookingController::class, 'checkout'])->name('booking.checkout');
+
     Route::get('/pesanan/{booking}/download', [BookingController::class, 'downloadInvoice'])->name('booking.downloadInvoice');
 });
 

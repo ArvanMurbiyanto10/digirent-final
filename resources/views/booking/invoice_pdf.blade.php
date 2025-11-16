@@ -146,10 +146,17 @@
             </div>
 
             @php
-                $statusClass = 'status-confirmed';
-                if ($booking->status == 'confirmed') $statusClass = 'status-confirmed';
-            @endphp
-            <p>Status: <span class="status-badge {{ $statusClass }}">{{ $booking->status }}</span></p>
+    // Logika untuk menentukan kelas CSS berdasarkan status
+    if ($booking->status == 'confirmed') {
+        $statusClass = 'status-confirmed'; // Akan jadi hijau
+    } elseif ($booking->status == 'pending') {
+        $statusClass = 'status-pending';   // Akan jadi kuning
+    } else {
+        $statusClass = 'status-pending';   // Fallback, anggap pending jika tidak ada yg cocok
+    }
+@endphp
+
+<p>Status: <span class="status-badge {{ $statusClass }}">{{ $booking->status }}</span></p>
 
             <table class="items-table">
                 <thead>

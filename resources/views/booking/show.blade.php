@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-    <h2 class="w-full text-center font-bold text-3xl text-gray-800 leading-tight">
-        Bukti Pesanan Anda
-    </h2>
-</x-slot>
+        <h2 class="w-full text-center font-bold text-3xl text-gray-800 leading-tight">
+            Bukti Pesanan Anda
+        </h2>
+    </x-slot>
 
-    {{-- [PERUBAHAN] Latar belakang halaman dipaksa jadi bg-gray-100 (light mode) --}}
+    {{-- Latar belakang halaman dipaksa jadi bg-gray-100 --}}
     <div class="py-12 bg-gray-100">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
 
-            {{-- Kotak invoice utama berwarna putih (tanpa dark mode) --}}
+            {{-- Kotak invoice utama berwarna putih --}}
             <div class="bg-white overflow-hidden shadow-lg rounded-lg">
                 <div class="p-8 text-gray-900">
 
@@ -22,10 +22,10 @@
                         <h1 class="text-3xl font-bold mb-2">Invoice Pesanan</h1>
                         <p class="text-gray-500 mb-6">Berikut adalah rincian pesanan Anda.</p>
 
-                        {{-- [PERUBAHAN] Kotak status abu-abu (bg-indigo-50) dihilangkan --}}
                         <p class="text-lg font-semibold mb-8 text-gray-800">
                             Status Pesanan:
                             <span class="px-3 py-1 text-sm font-semibold rounded-full
+                                {{-- Logika Warna Status --}}
                                 @if($booking->status == 'pending')
                                     bg-yellow-500 text-white
                                 @elseif($booking->status == 'confirmed')
@@ -34,6 +34,7 @@
                                     bg-red-500 text-white
                                 @endif
                             ">
+                                {{-- Logika Teks Status --}}
                                 @if($booking->status == 'pending')
                                     Menunggu Pembayaran
                                 @elseif($booking->status == 'confirmed')
@@ -45,7 +46,7 @@
                         </p>
                     </div>
 
-                    {{-- Detail Struk Clean (tanpa dark mode) --}}
+                    {{-- Detail Struk Clean --}}
                     <div class="mt-6">
                         <h3 class="text-xl font-semibold text-gray-900 mb-4">Detail Pesanan</h3>
                         <div class="space-y-3">
@@ -82,25 +83,36 @@
                         </div>
                     </div>
 
-                    {{-- Tombol Aksi --}}
+                    {{-- Tombol Aksi (Logika Telah Diperbaiki) --}}
                     <div class="mt-8">
                         <div class="flex flex-col sm:flex-row sm:justify-center sm:space-x-4 space-y-3 sm:space-y-0">
 
                             @if ($booking->status == 'pending')
+                                {{-- HANYA TAMPIL JIKA PENDING --}}
                                 <button id="pay-button" class="w-full sm:w-auto inline-block bg-purple-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-purple-700 transition-colors">
                                     Lanjutkan Pembayaran
                                 </button>
+                            @elseif ($booking->status == 'confirmed')
+                                {{-- HANYA TAMPIL JIKA SUDAH DIKONFIRMASI --}}
+                                <a href="{{ route('booking.downloadInvoice', $booking) }}" target="_blank" class="w-full sm:w-auto inline-block text-center bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors">
+                                    Download Struk (PDF)
+                                </a>
                             @endif
 
-                            <a href="{{ route('booking.downloadInvoice', $booking) }}" target="_blank" class="w-full sm:w-auto inline-block text-center bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors">
-                                Download Struk (PDF)
-                            </a>
-
-                            <a href="{{ route('dashboard') }}" class="w-full sm:w-auto inline-block text-center bg-purple-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-purple-700 transition-colors">
+                            {{-- SELALU TAMPIL --}}
+                            <a href="{{ route('dashboard') }}" class="w-full sm:w-auto inline-block text-center
+                                {{-- Ubah warna agar tidak bentrok dengan tombol bayar --}}
+                                @if($booking->status == 'pending')
+                                    bg-gray-500 hover:bg-gray-600
+                                @else
+                                    bg-purple-600 hover:bg-purple-700
+                                @endif
+                                text-white font-semibold py-3 px-8 rounded-lg transition-colors">
                                 Kembali ke Dashboard
                             </a>
 
-                            <a href="https://wa.me/6285175394607?text=Halo%20Admin%20DigiRent%2C%0A%0ASaya%20sudah%20berhasil%20melakukan%20pembayaran%20untuk%20pesanan%20berikut%20dan%20ingin%20melanjutkan%20proses%20sewa%3A%0A%0ADetail%20Pesanan%0ANo.%20Pesanan%3A%20%23{{ $booking->id ?? '...' }}%0AProduk%3A%20{{ $booking->product->name ?? '...' }}%0A%0ATerima%20kasih."
+                            {{-- SELALU TAMPIL (Teks WA diperbarui) --}}
+                            <a href="https://wa.me/6285175394607?text=Halo%20Admin%20DigiRent%2C%0A%0ASaya%20ingin%20bertanya%20mengenai%20pesanan%20%23{{ $booking->id ?? '...' }}%0AProduk%3A%20{{ $booking->product->name ?? '...' }}%0A%0ATerima%20kasih."
                                target="_blank"
                                class="w-full sm:w-auto inline-block text-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-300">
                                 <svg class="w-5 h-5 inline-block mr-1 -mt-1" fill="currentColor" viewBox="0 0 24 24">
@@ -117,35 +129,52 @@
         </div>
     </div>
 
-    {{-- Script Midtrans (TIDAK BERUBAH) --}}
+    {{-- Script Midtrans --}}
     @push('scripts')
         <script type="text/javascript">
             function attachSnapListener() {
                 var payButton = document.getElementById('pay-button');
                 if (payButton) {
                     payButton.addEventListener('click', function () {
+                        // Tampilkan loading/spinner di tombol
+                        payButton.disabled = true;
+                        payButton.innerHTML = 'Memuat...';
+
                         window.snap.pay('{{ $booking->snap_token }}', {
                             onSuccess: function(result){
+                                // Arahkan ke halaman sukses
                                 window.location.href = '{{ route("booking.success", $booking) }}';
                             },
                             onPending: function(result){
-                                alert("Menunggu pembayaran!");
+                                // Tetap di halaman ini, beri tahu user
+                                alert("Menunggu pembayaran Anda!");
+                                payButton.disabled = false;
+                                payButton.innerHTML = 'Lanjutkan Pembayaran';
                             },
                             onError: function(result){
-                                alert("Pembayaran gagal!");
+                                // Terjadi error
+                                alert("Pembayaran gagal! Silakan coba lagi.");
+                                payButton.disabled = false;
+                                payButton.innerHTML = 'Lanjutkan Pembayaran';
                             },
                             onClose: function(){
-                                // Tidak perlu alert
+                                // Pop-up ditutup sebelum selesai
+                                payButton.disabled = false;
+                                payButton.innerHTML = 'Lanjutkan Pembayaran';
                             }
                         });
                     });
                 }
             }
         </script>
-        <script type="text/javascript"
-            src="https://app.sandbox.midtrans.com/snap/snap.js"
-            data-client-key="{{ config('midtrans.client_key') }}"
-            onload="attachSnapListener()"
-        ></script>
+
+        {{-- Muat script Midtrans HANYA jika ada snap_token --}}
+        @if ($booking->snap_token)
+            <script type="text/javascript"
+                src="https::/app.sandbox.midtrans.com/snap/snap.js"
+                data-client-key="{{ config('midtrans.client_key') }}"
+                onload="attachSnapListener()"
+            ></script>
+        @endif
     @endpush
 </x-app-layout>

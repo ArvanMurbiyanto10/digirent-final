@@ -54,12 +54,19 @@
                 <div class="mt-8">
                     <div class="flex flex-col sm:flex-row sm:justify-center sm:space-x-4 space-y-3 sm:space-y-0">
 
+                        {{-- === [ TOMBOL PDF DITAMBAHKAN DI SINI ] === --}}
+                        <a href="{{ route('booking.downloadInvoice', $booking) }}"
+                           target="_blank"
+                           class="w-full sm:w-auto inline-block text-center px-6 py-3 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition-colors duration-300">
+                            Download Struk (PDF)
+                        </a>
+                        {{-- ============================================== --}}
+
                         <a href="{{ route('dashboard') }}"
                            class="w-full sm:w-auto inline-block text-center px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition-colors duration-300">
                             Lihat Dashboard Saya
                         </a>
 
-                        {{-- === [KATA-KATA WHATSAPP DIPERBARUI DI SINI] === --}}
                         <a href="https://wa.me/6285175394607?text=Halo%20Admin%20DigiRent%2C%0A%0ASaya%20sudah%20berhasil%20melakukan%20pembayaran%20untuk%20pesanan%20berikut%20dan%20ingin%20melanjutkan%20proses%20sewa%3A%0A%0ADetail%20Pesanan%0ANo.%20Pesanan%3A%20%23{{ $booking->id ?? '...' }}%0AProduk%3A%20{{ $booking->product->name ?? '...' }}%0A%0ATerima%20kasih."
                            target="_blank"
                            class="w-full sm:w-auto inline-block text-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-300">

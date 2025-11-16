@@ -41,6 +41,7 @@ class BookingController extends Controller
             'end_date' => $endDate,
             'total_price' => $totalPrice,
             'status' => 'pending',
+            // snap_token masih null di sini, itu normal
         ]);
 
         $booking->load('user', 'product');
@@ -64,9 +65,21 @@ class BookingController extends Controller
         ];
 
         // 5. Dapatkan Snap Token
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
+        try {
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+        } catch (\Exception $e) {
+            // Jika gagal, hapus booking yang baru dibuat agar tidak jadi "sampah"
+            $booking->delete();
+            return redirect()->back()->withErrors(['msg' => 'Gagal terhubung dengan Midtrans: ' . $e->getMessage()]);
+        }
 
-        // 6. Arahkan ke halaman checkout
+        // 6. SIMPAN TOKEN KE DATABASE (INI YANG PALING PENTING)
+        $booking->snap_token = $snapToken;
+        $booking->save();
+
+        // 7. Arahkan ke halaman checkout
+        // Halaman 'booking.checkout' ini akan langsung menampilkan pop-up bayar
+        // (Asumsi di file checkout.blade.php Anda ada script snap.pay())
         return view('booking.checkout', compact('booking', 'snapToken'));
     }
 

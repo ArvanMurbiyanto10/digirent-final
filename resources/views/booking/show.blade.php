@@ -87,21 +87,19 @@
                     <div class="mt-8">
                         <div class="flex flex-col sm:flex-row sm:justify-center sm:space-x-4 space-y-3 sm:space-y-0">
 
-                            @if ($booking->status == 'pending')
-                                {{-- HANYA TAMPIL JIKA PENDING --}}
+                            {{-- KUNCI 1: Tombol hanya tampil jika status pending DAN snap_token ada --}}
+                            @if ($booking->status == 'pending' && $booking->snap_token)
                                 <button id="pay-button" class="w-full sm:w-auto inline-block bg-purple-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-purple-700 transition-colors">
                                     Lanjutkan Pembayaran
                                 </button>
                             @elseif ($booking->status == 'confirmed')
-                                {{-- HANYA TAMPIL JIKA SUDAH DIKONFIRMASI --}}
                                 <a href="{{ route('booking.downloadInvoice', $booking) }}" target="_blank" class="w-full sm:w-auto inline-block text-center bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors">
                                     Download Struk (PDF)
                                 </a>
                             @endif
 
-                            {{-- SELALU TAMPIL --}}
+                            {{-- Tombol Kembali ke Dashboard --}}
                             <a href="{{ route('dashboard') }}" class="w-full sm:w-auto inline-block text-center
-                                {{-- Ubah warna agar tidak bentrok dengan tombol bayar --}}
                                 @if($booking->status == 'pending')
                                     bg-gray-500 hover:bg-gray-600
                                 @else
@@ -111,7 +109,7 @@
                                 Kembali ke Dashboard
                             </a>
 
-                            {{-- SELALU TAMPIL (Teks WA diperbarui) --}}
+                            {{-- Tombol Chat Admin (WA) --}}
                             <a href="https://wa.me/6285175394607?text=Halo%20Admin%20DigiRent%2C%0A%0ASaya%20ingin%20bertanya%20mengenai%20pesanan%20%23{{ $booking->id ?? '...' }}%0AProduk%3A%20{{ $booking->product->name ?? '...' }}%0A%0ATerima%20kasih."
                                target="_blank"
                                class="w-full sm:w-auto inline-block text-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-300">
@@ -129,36 +127,39 @@
         </div>
     </div>
 
-    {{-- Script Midtrans --}}
+    {{-- KUNCI 2: Blok Script Lengkap di Bawah --}}
     @push('scripts')
+        {{-- Fungsi ini akan dipanggil oleh 'onload' di bawah --}}
         <script type="text/javascript">
             function attachSnapListener() {
                 var payButton = document.getElementById('pay-button');
+
                 if (payButton) {
                     payButton.addEventListener('click', function () {
-                        // Tampilkan loading/spinner di tombol
+                        // Ubah tombol jadi loading
                         payButton.disabled = true;
                         payButton.innerHTML = 'Memuat...';
 
+                        // Panggil Snap
                         window.snap.pay('{{ $booking->snap_token }}', {
                             onSuccess: function(result){
                                 // Arahkan ke halaman sukses
                                 window.location.href = '{{ route("booking.success", $booking) }}';
                             },
                             onPending: function(result){
-                                // Tetap di halaman ini, beri tahu user
                                 alert("Menunggu pembayaran Anda!");
+                                // Kembalikan tombol seperti semula
                                 payButton.disabled = false;
                                 payButton.innerHTML = 'Lanjutkan Pembayaran';
                             },
                             onError: function(result){
-                                // Terjadi error
                                 alert("Pembayaran gagal! Silakan coba lagi.");
+                                // Kembalikan tombol seperti semula
                                 payButton.disabled = false;
                                 payButton.innerHTML = 'Lanjutkan Pembayaran';
                             },
                             onClose: function(){
-                                // Pop-up ditutup sebelum selesai
+                                // Pop-up ditutup, kembalikan tombol seperti semula
                                 payButton.disabled = false;
                                 payButton.innerHTML = 'Lanjutkan Pembayaran';
                             }
@@ -168,13 +169,16 @@
             }
         </script>
 
-        {{-- Muat script Midtrans HANYA jika ada snap_token --}}
+        {{-- KUNCI 3: Script Midtrans (TYPO DIPERBAIKI) --}}
+        {{-- Ini hanya akan di-load jika $booking->snap_token ada --}}
         @if ($booking->snap_token)
-            <script type="text/javascript"
-                src="https::/app.sandbox.midtrans.com/snap/snap.js"
+            <script
+                src="https://app.sandbox.midtrans.com/snap/snap.js"
                 data-client-key="{{ config('midtrans.client_key') }}"
                 onload="attachSnapListener()"
             ></script>
+            {{-- 'onload' akan memanggil fungsi 'attachSnapListener' SETELAH script ini selesai di-load --}}
         @endif
     @endpush
+
 </x-app-layout>

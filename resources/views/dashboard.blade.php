@@ -8,11 +8,9 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
-            {{-- KOTAK 1: "You're logged in" (Selalu Putih) --}}
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+            <div class="bg-indigo-100 overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
+                    {{ __("Selamat datang! Kelola semua penyewaan Anda di sini.") }}
                 </div>
             </div>
 

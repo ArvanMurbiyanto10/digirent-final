@@ -17,7 +17,7 @@ class MainSeeder extends Seeder
         Schema::disableForeignKeyConstraints();
         Product::truncate();
         Category::truncate();
-        User::truncate();0
+        User::truncate();
         Schema::enableForeignKeyConstraints();
 
         // 1. Buat User Admin

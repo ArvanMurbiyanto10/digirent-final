@@ -12,8 +12,8 @@ use Illuminate\View\View;
 // TAMBAHKAN USE STATEMENTS INI
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash; // <- Dihapus dari kode Anda, tapi tidak apa-apa jika ada
+use Illuminate\Support\Str; // <- Dihapus dari kode Anda, tapi tidak apa-apa jika ada
 
 class AuthenticatedSessionController extends Controller
 {
@@ -27,7 +27,6 @@ class AuthenticatedSessionController extends Controller
 
     /**
      * Handle an incoming authentication request.
-     * (Fungsi 'store' ini tidak akan kita pakai lagi, tapi biarkan saja)
      */
     public function store(LoginRequest $request): RedirectResponse
     {
@@ -48,14 +47,13 @@ class AuthenticatedSessionController extends Controller
     }
 
 
-    // --- TAMBAHKAN DUA FUNGSI BARU DI BAWAH INI ---
+    // --- FUNGSI GOOGLE AUTH ---
 
     /**
      * Redirect the user to the Google authentication page.
      */
     public function redirectToGoogle(): RedirectResponse
     {
-        // Fungsi ini akan mengarahkan pengguna ke halaman login Google
         return Socialite::driver('google')->redirect();
     }
 
@@ -73,6 +71,9 @@ class AuthenticatedSessionController extends Controller
 
             // 3. Jika pengguna ditemukan, langsung loginkan
             if ($user) {
+                // Opsional: Update google_id jika Anda menambahkannya di masa depan
+                // $user->update(['google_id' => $googleUser->getId()]);
+
                 Auth::login($user);
                 return redirect()->intended(route('dashboard', absolute: false));
             }
@@ -81,7 +82,12 @@ class AuthenticatedSessionController extends Controller
             $newUser = User::create([
                 'name' => $googleUser->getName(),
                 'email' => $googleUser->getEmail(),
-                'password' => Hash::make(Str::random(24)), // Buat password acak (tidak akan dipakai)
+                'email_verified_at' => now(), // Email Google sudah pasti terverifikasi
+
+                // --- INI PERBAIKAN UTAMANYA ---
+                'password' => null, // Set password ke NULL
+                // ---------------------------------
+
                 'role' => 'user', // Set role default
             ]);
 
@@ -91,6 +97,7 @@ class AuthenticatedSessionController extends Controller
 
         } catch (\Exception $e) {
             // Jika ada error, kembali ke login
+            // dd($e->getMessage()); // Uncomment ini untuk debugging jika perlu
             return redirect()->route('login')->with('error', 'Login dengan Google gagal, coba lagi.');
         }
     }

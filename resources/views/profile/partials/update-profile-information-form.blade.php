@@ -1,10 +1,15 @@
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+        {{-- Teks header (Sudah 'text-indigo-800') --}}
+        <h2 class="text-lg font-medium text-indigo-800">
             {{ __('Profile Information') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        {{--
+            PERUBAHAN DI SINI:
+            'text-indigo-700' diubah menjadi 'text-indigo-800' agar lebih gelap dan jelas.
+        --}}
+        <p class="mt-1 text-sm text-indigo-800">
             {{ __("Update your account's profile information and email address.") }}
         </p>
     </header>
@@ -17,12 +22,14 @@
         @csrf
         @method('patch')
 
+        {{-- Field Nama --}}
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
+        {{-- Field Email --}}
         <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
@@ -30,16 +37,17 @@
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
-                    <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
+                    {{-- Teks verifikasi email (sudah 'text-indigo-800') --}}
+                    <p class="text-sm mt-2 text-indigo-800">
                         {{ __('Your email address is unverified.') }}
 
-                        <button form="send-verification" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                        <button form="send-verification" class="underline text-sm text-indigo-600 hover:text-indigo-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
+                        <p class="mt-2 font-medium text-sm text-green-600">
                             {{ __('A new verification link has been sent to your email address.') }}
                         </p>
                     @endif
@@ -47,16 +55,35 @@
             @endif
         </div>
 
+        {{-- Field Telepon --}}
+        <div>
+            <x-input-label for="phone" :value="__('Phone Number')" />
+            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" autocomplete="tel" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+        </div>
+
+        {{-- Field Alamat --}}
+        <div>
+            <x-input-label for="address" :value="__('Address')" />
+            <textarea id="address" name="address" class="border-gray-300 dark:border-gray-700 dark:bg-white dark:text-gray-900 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm mt-1 block w-full" rows="3">{{ old('address', $user->address) }}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('address')" />
+        </div>
+
+        {{-- Tombol Save --}}
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')
+                {{--
+                    PERUBAHAN DI SINI:
+                    Teks 'Saved.' juga diubah ke 'text-indigo-800' agar seragam.
+                --}}
                 <p
                     x-data="{ show: true }"
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600 dark:text-gray-400"
+                    class="text-sm text-indigo-800"
                 >{{ __('Saved.') }}</p>
             @endif
         </div>

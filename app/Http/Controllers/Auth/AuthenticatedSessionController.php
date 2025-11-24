@@ -4,16 +4,16 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
-
-// TAMBAHKAN USE STATEMENTS INI
-use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash; // <- Dihapus dari kode Anda, tapi tidak apa-apa jika ada
-use Illuminate\Support\Str; // <- Dihapus dari kode Anda, tapi tidak apa-apa jika ada
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+// TAMBAHKAN USE STATEMENTS INI
+use Illuminate\View\View;
+use Laravel\Socialite\Facades\Socialite;
+
+// <- Dihapus dari kode Anda, tapi tidak apa-apa jika ada
+// <- Dihapus dari kode Anda, tapi tidak apa-apa jika ada
 
 class AuthenticatedSessionController extends Controller
 {
@@ -32,6 +32,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
@@ -43,9 +44,9 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect('/');
     }
-
 
     // --- FUNGSI GOOGLE AUTH ---
 
@@ -75,6 +76,7 @@ class AuthenticatedSessionController extends Controller
                 // $user->update(['google_id' => $googleUser->getId()]);
 
                 Auth::login($user);
+
                 return redirect()->intended(route('dashboard', absolute: false));
             }
 
@@ -93,6 +95,7 @@ class AuthenticatedSessionController extends Controller
 
             // 5. Loginkan pengguna baru
             Auth::login($newUser);
+
             return redirect()->intended(route('dashboard', absolute: false));
 
         } catch (\Exception $e) {

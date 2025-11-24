@@ -13,6 +13,7 @@ class NewsItemController extends Controller
     public function index()
     {
         $newsItems = NewsItem::latest()->paginate(10); // Ambil data berita
+
         return view('admin.news.index', compact('newsItems'));
     }
 

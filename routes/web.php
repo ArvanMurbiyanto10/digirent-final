@@ -1,19 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-
-// Import semua Controller yang kita butuhkan
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\NewsItemController;
-
-// [INI YANG DIPERBAIKI] Import controller untuk Google Auth
+// Import semua Controller yang kita butuhkan
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
+// [INI YANG DIPERBAIKI] Import controller untuk Google Auth
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,7 +47,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/pesanan/{booking}/download', [BookingController::class, 'downloadInvoice'])->name('booking.downloadInvoice');
 });
 
-
 // == RUTE ADMIN ==
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -60,7 +57,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('news-items', NewsItemController::class);
 });
 
-
 // == [RUTE GOOGLE DITARUH DI SINI] ==
 // Rute untuk Google Auth
 Route::get('/auth/google/redirect', [AuthenticatedSessionController::class, 'redirectToGoogle'])
@@ -69,7 +65,6 @@ Route::get('/auth/google/redirect', [AuthenticatedSessionController::class, 'red
 Route::get('/auth/google/callback', [AuthenticatedSessionController::class, 'handleGoogleCallback'])
     ->name('auth.google.callback');
 
-
 // File rute autentikasi bawaan dari Breeze
 // PASTIKAN INI SELALU ADA DI BARIS PALING AKHIR
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

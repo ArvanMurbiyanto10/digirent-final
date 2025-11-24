@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -14,6 +13,7 @@ class AdminController extends Controller
     public function dashboard()
     {
         $bookings = Booking::with(['user', 'product'])->latest()->get();
+
         return view('admin.dashboard', compact('bookings'));
     }
 

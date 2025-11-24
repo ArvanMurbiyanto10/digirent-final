@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User; // <-- Pastikan baris ini ada
-use App\Models\Product; // <-- Pastikan baris ini ada
+
+// <-- Pastikan baris ini ada
+// <-- Pastikan baris ini ada
 
 class Booking extends Model
 {

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use App\Models\Booking;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf; // <-- Merapikan use statement untuk PDF
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; // <-- Merapikan use statement untuk PDF
 
 class BookingController extends Controller
 {
@@ -55,7 +55,7 @@ class BookingController extends Controller
         // 4. Siapkan data transaksi untuk Midtrans
         $params = [
             'transaction_details' => [
-                'order_id' => $booking->id . '-' . time(),
+                'order_id' => $booking->id.'-'.time(),
                 'gross_amount' => $booking->total_price,
             ],
             'customer_details' => [
@@ -70,7 +70,8 @@ class BookingController extends Controller
         } catch (\Exception $e) {
             // Jika gagal, hapus booking yang baru dibuat agar tidak jadi "sampah"
             $booking->delete();
-            return redirect()->back()->withErrors(['msg' => 'Gagal terhubung dengan Midtrans: ' . $e->getMessage()]);
+
+            return redirect()->back()->withErrors(['msg' => 'Gagal terhubung dengan Midtrans: '.$e->getMessage()]);
         }
 
         // 6. SIMPAN TOKEN KE DATABASE (INI YANG PALING PENTING)
@@ -92,7 +93,7 @@ class BookingController extends Controller
 
         $whatsappNumber = '6285175394607';
         $message = "Halo Admin DigiRent,\n\nSaya ingin menanyakan pesanan berikut:\nNo. Pesanan: *#{$booking->id}*\nProduk: *{$booking->product->name}*";
-        $whatsappLink = 'https://wa.me/' . $whatsappNumber . '?text=' . urlencode($message);
+        $whatsappLink = 'https://wa.me/'.$whatsappNumber.'?text='.urlencode($message);
 
         return view('booking.show', compact('booking', 'whatsappLink'));
     }
@@ -112,7 +113,7 @@ class BookingController extends Controller
 
         $whatsappNumber = '6285175394607';
         $message = "Halo Admin DigiRent,\n\nSaya sudah berhasil melakukan pembayaran untuk pesanan berikut dan ingin melanjutkan proses sewa:\n\n*Detail Pesanan*\nNo. Pesanan: *#{$booking->id}*\nProduk: *{$booking->product->name}*\n\nTerima kasih.";
-        $whatsappLink = 'https://wa.me/' . $whatsappNumber . '?text=' . urlencode($message);
+        $whatsappLink = 'https://wa.me/'.$whatsappNumber.'?text='.urlencode($message);
 
         return view('booking.success', compact('booking', 'whatsappLink'));
     }
@@ -135,7 +136,8 @@ class BookingController extends Controller
         ];
 
         $pdf = Pdf::loadView('booking.invoice_pdf', $data); // Menggunakan Pdf:: facade
-        $filename = 'invoice-digirent-' . $booking->id . '.pdf';
+        $filename = 'invoice-digirent-'.$booking->id.'.pdf';
+
         return $pdf->download($filename);
     }
 }

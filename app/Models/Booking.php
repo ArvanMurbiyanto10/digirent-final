@@ -4,9 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-// <-- Pastikan baris ini ada
-// <-- Pastikan baris ini ada
+use Illuminate\Database\Eloquent\Relations\BelongsTo; // <--- INI YANG PENTING DITAMBAHKAN
 
 class Booking extends Model
 {
@@ -34,7 +32,7 @@ class Booking extends Model
     /**
      * Mendapatkan data produk yang dibooking.
      */
-    public function product()
+    public function product(): BelongsTo // <--- Tambahkan ": BelongsTo" agar PHPStan senang
     {
         return $this->belongsTo(Product::class);
     }
@@ -42,7 +40,7 @@ class Booking extends Model
     /**
      * Mendapatkan data user (penyewa) yang membuat booking.
      */
-    public function user()
+    public function user(): BelongsTo // <--- Tambahkan ": BelongsTo" di sini juga
     {
         return $this->belongsTo(User::class);
     }

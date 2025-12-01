@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo; // <--- PENTING: Import class BelongsTo
 
 class Product extends Model
 {
@@ -24,7 +25,7 @@ class Product extends Model
     /**
      * Relasi ke model Category.
      */
-    public function category()
+    public function category(): BelongsTo // <--- PENTING: Tambahkan tipe pengembalian ": BelongsTo"
     {
         return $this->belongsTo(Category::class);
     }

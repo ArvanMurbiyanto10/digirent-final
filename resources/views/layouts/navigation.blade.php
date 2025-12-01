@@ -4,10 +4,10 @@
         <div class="flex justify-between h-16 relative">
             <div class="flex">
                 <div class="shrink-0 flex items-center">
-                    {{-- Mengganti tag <a> menjadi <span> agar tidak bisa diklik --}}
-                        <span class="text-xl font-bold text-gray-800">
-                            DigiRent
-                        </span>
+                    {{-- Logo MY cell (Merah & Non-clickable) --}}
+                    <span class="text-xl font-bold text-red-600">
+                        MY cell
+                    </span>
                 </div>
             </div>
 
@@ -16,14 +16,14 @@
                 <div class="flex items-center space-x-4">
                     <a href="{{ route('home') }}" class="px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-300
                         {{ request()->routeIs('home')
-                            ? 'bg-purple-600 text-white shadow-md'
-                            : 'text-gray-500 hover:text-purple-700' }}">
+    ? 'bg-purple-600 text-white shadow-md'
+    : 'text-gray-500 hover:text-purple-700' }}">
                         Home
                     </a>
                     <a href="{{ route('products.index') }}" class="px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-300
                         {{ request()->routeIs('products.index') || request()->routeIs('products.show')
-                            ? 'bg-purple-600 text-white shadow-md'
-                            : 'text-gray-500 hover:text-purple-700' }}">
+    ? 'bg-purple-600 text-white shadow-md'
+    : 'text-gray-500 hover:text-purple-700' }}">
                         Produk
                     </a>
                 </div>
@@ -55,12 +55,10 @@
                                 <x-dropdown-link :href="route('admin.products.index')">
                                     {{ __('Kelola Produk') }}
                                 </x-dropdown-link>
-                                {{-- =================================== --}}
-                                {{-- == [TAMBAHKAN KODE INI DI SINI] == --}}
-                                <x-dropdown-link :href="route('admin.news-items.index')" :active="request()->routeIs('admin.news-items.*')">
+                                <x-dropdown-link :href="route('admin.news-items.index')"
+                                    :active="request()->routeIs('admin.news-items.*')">
                                     {{ __('Kelola Berita') }}
                                 </x-dropdown-link>
-                                {{-- =================================== --}}
                             @else
                                 <x-dropdown-link :href="route('dashboard')">
                                     {{ __('Dashboard') }}
@@ -74,21 +72,18 @@
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                                                    this.closest('form').submit();">
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
                             </form>
                         </x-slot>
                     </x-dropdown>
                 @else
-                    {{-- Tombol Login/Register --}}
-                    <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900">Log in</a>
-
-                    {{--
-                        [DIHAPUS] Link Register yang menyebabkan error
-                    <a href="{{ route('register') }}"
-                        class="ms-4 font-semibold text-gray-600 hover:text-gray-900">Register</a>
-                    --}}
+                    {{-- [PERUBAHAN DI SINI] Tombol Login menjadi Biru --}}
+                    <a href="{{ route('login') }}"
+                        class="px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition shadow-md shadow-blue-200">
+                        Log in
+                    </a>
                 @endauth
             </div>
 
@@ -131,15 +126,14 @@
                         <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                             {{ __('Kelola Pesanan') }}
                         </x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
+                        <x-responsive-nav-link :href="route('admin.products.index')"
+                            :active="request()->routeIs('admin.products.*')">
                             {{ __('Kelola Produk') }}
                         </x-responsive-nav-link>
-                        {{-- =================================== --}}
-                        {{-- == [TAMBAHKAN JUGA DI SINI] == --}}
-                        <x-responsive-nav-link :href="route('admin.news-items.index')" :active="request()->routeIs('admin.news-items.*')">
+                        <x-responsive-nav-link :href="route('admin.news-items.index')"
+                            :active="request()->routeIs('admin.news-items.*')">
                             {{ __('Kelola Berita') }}
                         </x-responsive-nav-link>
-                        {{-- =================================== --}}
                     @else
                         <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                             {{ __('Dashboard') }}
@@ -149,7 +143,7 @@
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <x-responsive-nav-link :href="route('logout')"
-                                onclick="event.preventDefault(); this.closest('form').submit();">
+                            onclick="event.preventDefault(); this.closest('form').submit();">
                             {{ __('Log Out') }}
                         </x-responsive-nav-link>
                     </form>
@@ -157,11 +151,6 @@
             @else
                 <div class="pt-2 pb-3 space-y-1">
                     <x-responsive-nav-link :href="route('login')">{{ __('Log In') }}</x-responsive-nav-link>
-
-                    {{--
-                        [DIHAPUS] Link Register yang menyebabkan error
-                    <x-responsive-nav-link :href="route('register')">{{ __('Register') }}</x-responsive-nav-link>
-                    --}}
                 </div>
             @endauth
         </div>

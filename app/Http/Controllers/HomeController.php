@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NewsItem;
+use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\NewsItem;
+use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $products = Product::latest()->take(10)->get();
-        $newsItems = NewsItem::latest()->take(10)->get(); // Ambil maksimal 10 berita terbaru
 
-        return view('welcome', compact('products', 'newsItems')); // Kirim newsItems ke view
+        // PERBAIKAN: Ubah nama variabel dari $news menjadi $newsItems
+        // agar cocok dengan yang diminta oleh file welcome.blade.php
+        $newsItems = NewsItem::latest()->take(4)->get();
+
+        // Jangan lupa ubah di dalam compact() juga
+        return view('welcome', compact('products', 'newsItems'));
     }
 }

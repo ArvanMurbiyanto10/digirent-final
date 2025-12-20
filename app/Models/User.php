@@ -4,9 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable; // <-- Tambahkan ini
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -22,10 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'phone',    // <-- TAMBAHKAN INI
-        'address',  // <-- TAMBAHKAN INI
+        'google_id',
         'role',
-        'email_verified_at',
+        'phone',
+        'address',
     ];
 
     /**
@@ -52,10 +51,9 @@ class User extends Authenticatable
     }
 
     /**
-     * TAMBAHKAN FUNGSI INI
-     * Mendefinisikan relasi bahwa satu User bisa memiliki banyak Booking.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Booking, $this>
      */
-    public function bookings(): HasMany
+    public function bookings()
     {
         return $this->hasMany(Booking::class);
     }

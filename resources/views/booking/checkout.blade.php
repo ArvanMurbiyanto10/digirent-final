@@ -45,7 +45,7 @@
                         </div>
                         <hr>
                         <div class="flex justify-between text-xl">
-                            <span class="font-bold text-gray-800">Total Pembayaran</span>
+                            <span class="font-bold text-gray-800">Total Pembayaran</span> 
                             <span class="font-bold text-purple-600">Rp {{ number_format($booking->total_price) }}</span>
                         </div>
                     </div>

@@ -4,12 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo; // <--- INI YANG PENTING DITAMBAHKAN
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Booking extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'product_id',
@@ -17,12 +15,11 @@ class Booking extends Model
         'end_date',
         'total_price',
         'status',
+        'snap_token',
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'start_date' => 'datetime',
@@ -30,17 +27,17 @@ class Booking extends Model
     ];
 
     /**
-     * Mendapatkan data produk yang dibooking.
+     * @return BelongsTo<Product, $this>
      */
-    public function product(): BelongsTo // <--- Tambahkan ": BelongsTo" agar PHPStan senang
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
     /**
-     * Mendapatkan data user (penyewa) yang membuat booking.
+     * @return BelongsTo<User, $this>
      */
-    public function user(): BelongsTo // <--- Tambahkan ": BelongsTo" di sini juga
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

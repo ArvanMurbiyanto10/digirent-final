@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers; // Pastikan namespace-nya BENAR
+namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $products = Product::with('category')->latest()->get();
         $categories = Category::all();
@@ -15,10 +16,9 @@ class ProductController extends Controller
         return view('products.index', compact('products', 'categories'));
     }
 
-    public function show(Product $product)
+    public function show(Product $product): View
     {
-        // The $product variable is automatically fetched from the database
-        // based on the slug in the URL.
+        // $product otomatis di-resolve oleh Route Model Binding
         return view('products.show', compact('product'));
     }
 }

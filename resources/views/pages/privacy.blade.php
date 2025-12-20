@@ -83,7 +83,7 @@
             <div class="terms-content">
                 <p class="updated-date">Terakhir diperbarui: 2 Oktober 2025</p>
 
-                <p>Kebijakan Privasi ini menjelaskan bagaimana informasi Anda dikumpulkan, digunakan, dan dibagikan saat Anda menggunakan layanan DigiRent ("Layanan").</p>
+                <p>Kebijakan Privasi ini menjelaskan bagaimana informasi Anda dikumpulkan, digunakan, dan dibagikan saat Anda menggunakan layanan MY cell.</p>
 
                 <h2>1. Informasi yang Kami Kumpulkan</h2>
                 <p>Kami mengumpulkan informasi yang Anda berikan langsung kepada kami, seperti:</p>

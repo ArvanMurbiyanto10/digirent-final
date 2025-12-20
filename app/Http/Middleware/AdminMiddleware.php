@@ -11,9 +11,12 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Cek jika pengguna sudah login DAN memiliki role 'admin'
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            // Jika ya, lanjutkan ke halaman yang dituju
+        // Fix: Simpan user ke variabel dulu untuk validasi PHPStan
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+
+        // Cek apakah $user ADA (tidak null) DAN role-nya 'admin'
+        if ($user && $user->role === 'admin') {
             return $next($request);
         }
 

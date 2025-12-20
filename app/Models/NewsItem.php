@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class NewsItem extends Model
 {
+    /** @use HasFactory<\Database\Factories\NewsItemFactory> */
     use HasFactory;
 
     protected $fillable = [

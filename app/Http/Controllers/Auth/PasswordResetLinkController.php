@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth; // Menentukan namespace lokasi file ini
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
-use Illuminate\View\View;
+use App\Http\Controllers\Controller; // Mengimpor Controller induk
+use Illuminate\Http\RedirectResponse; // Mengimpor tipe data kembalian untuk redirect
+use Illuminate\Http\Request;         // Mengimpor class Request untuk menangani input form
+use Illuminate\Support\Facades\Password; // Mengimpor Facade Password (Broker) untuk menangani logika reset password
+use Illuminate\View\View;            // Mengimpor tipe data kembalian untuk view
 
-class PasswordResetLinkController extends Controller
+class PasswordResetLinkController extends Controller // Definisi kelas controller
 {
     /**
      * Display the password reset link request view.
      */
-    public function create(): View
+    public function create(): View // Method untuk menampilkan halaman form "Lupa Password"
     {
-        return view('auth.forgot-password');
+        return view('auth.forgot-password'); // Mengembalikan view 'resources/views/auth/forgot-password.blade.php'
     }
 
     /**
@@ -23,22 +23,29 @@ class PasswordResetLinkController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse // Method untuk memproses pengiriman link (POST)
     {
+        // Validasi input: Pastikan kolom email diisi dan formatnya benar-benar email
         $request->validate([
             'email' => ['required', 'email'],
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
+        // Kami akan mengirimkan tautan setel ulang kata sandi ke pengguna ini.
+        // Setelah kami mencoba mengirim tautan, kami akan memeriksa responsnya
+        // untuk melihat pesan apa yang perlu kami tunjukkan kepada pengguna.
+
+        // Method sendResetLink melakukan beberapa hal sekaligus:
+        // 1. Mengecek apakah email ada di tabel 'users'.
+        // 2. Membuat token unik dan menyimpannya di tabel 'password_resets'.
+        // 3. Mengirim email notifikasi berisi link reset ke user.
         $status = Password::sendResetLink(
-            $request->only('email')
+            $request->only('email') // Mengambil hanya data email dari input form
         );
 
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+        // Mengecek status hasil operasi di atas
+        return $status == Password::RESET_LINK_SENT // Jika statusnya SUKSES (Link berhasil dikirim)
+            ? back()->with('status', __($status)) // Kembali ke halaman form dengan pesan sukses (flash message)
+            : back()->withInput($request->only('email')) // JIKA GAGAL (Misal: Email tidak terdaftar di sistem)
+            ->withErrors(['email' => __($status)]); // Kembali dengan input email lama dan tampilkan pesan error pada field email
     }
 }

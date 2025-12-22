@@ -1,39 +1,59 @@
 <?php
 
-namespace App\Http\Controllers\Admin; // Menentukan namespace (lokasi folder logis) agar kelas ini bisa dipanggil dengan benar oleh Laravel
+namespace App\Http\Controllers\Admin; // Menentukan lokasi namespace file ini agar bisa dipanggil oleh Laravel.
 
-use App\Http\Controllers\Controller; // Mengimpor kelas Controller induk bawaan Laravel
-use App\Models\Booking;              // Mengimpor Model Booking agar kita bisa mengakses data di tabel 'bookings'
-use Illuminate\Contracts\View\View;   // Mengimpor interface View untuk menetapkan tipe data kembalian (return type)
-use Illuminate\Http\RedirectResponse;  // Mengimpor kelas RedirectResponse untuk menetapkan tipe data kembalian redirect
+use App\Http\Controllers\Controller; // Mengimpor Controller induk (base controller).
+use App\Models\Booking;              // Mengimpor Model Booking untuk berinteraksi dengan tabel 'bookings'.
+use Illuminate\Contracts\View\View;   // Mengimpor interface View untuk menetapkan tipe return method dashboard.
+use Illuminate\Http\RedirectResponse;  // Mengimpor tipe return untuk redirect (setelah update status).
 
-class AdminController extends Controller // Mendefinisikan kelas AdminController yang mewarisi (extends) fitur-fitur dari Controller utama
+class AdminController extends Controller // Definisi kelas AdminController.
 {
     /**
-     * Menampilkan halaman dashboard admin dengan semua data pesanan.
-     * @return View  // Dokumentasi PHPDoc: Metode ini mengembalikan objek View
+     * Menampilkan halaman dashboard admin dengan statistik dan daftar pesanan.
+     * @return View
      */
-    public function dashboard(): View // Mendefinisikan method public bernama 'dashboard' yang wajib mengembalikan sebuah View
+    public function dashboard(): View // Method 'dashboard' wajib mengembalikan tampilan (View).
     {
-        $bookings = Booking::with(['user', 'product']) // Memulai query Eloquent: Ambil data Booking beserta relasi 'user' dan 'product' (Eager Loading untuk performa)
-            ->latest()                                  // Mengurutkan hasil berdasarkan kolom 'created_at' secara menurun (data terbaru muncul paling atas)
-            ->get();                                    // Mengeksekusi query dan mengambil seluruh hasilnya dalam bentuk Collection
+        // 1. MENGAMBIL DATA DAFTAR PESANAN
+        $bookings = Booking::with(['user', 'product']) // Eager Loading: Ambil data relasi 'user' dan 'product' sekaligus biar query cepat.
+            ->latest()                                  // Urutkan data berdasarkan 'created_at' (paling baru di atas).
+            ->get();                                    // Eksekusi query dan ambil semua hasilnya menjadi Collection.
 
-        return view('admin.dashboard', compact('bookings')); // Mengembalikan view yang ada di 'resources/views/admin/dashboard.blade.php' dan mengirimkan variabel $bookings ke sana
+        // 2. MENGHITUNG TOTAL PENDAPATAN (Financial Metric)
+        // Kita hanya menjumlahkan 'total_price' jika statusnya 'confirmed' (sudah bayar).
+        // Pesanan 'pending' atau batal tidak boleh dihitung sebagai omzet.
+        $totalRevenue = Booking::where('status', 'confirmed')->sum('total_price');
+
+        // 3. MENGHITUNG JUMLAH ORDER PENDING (Operational Metric)
+        // Ini berguna untuk notifikasi badge atau kartu peringatan admin bahwa ada X pesanan yang butuh tindakan.
+        $pendingCount = Booking::where('status', 'pending')->count();
+
+        // 4. MENGHITUNG TOTAL TRANSAKSI SUKSES (Performance Metric)
+        // Menghitung berapa kali penyewaan berhasil dilakukan.
+        $successCount = Booking::where('status', 'confirmed')->count();
+
+        // Mengembalikan file view 'resources/views/admin/dashboard.blade.php'.
+        // Fungsi compact() membungkus semua variabel ($bookings, $totalRevenue, dll) menjadi array untuk dikirim ke View.
+        return view('admin.dashboard', compact('bookings', 'totalRevenue', 'pendingCount', 'successCount'));
     }
 
     /**
-     * Mengubah status booking menjadi 'confirmed'.
-     * @param Booking $booking // Laravel otomatis mencari data Booking berdasarkan ID di URL (Route Model Binding)
-     * @return RedirectResponse // Dokumentasi PHPDoc: Metode ini mengembalikan respon Redirect
+     * Mengubah status booking menjadi 'confirmed' (Manual Confirmation).
+     * @param Booking $booking (Route Model Binding: cari booking by ID otomatis)
+     * @return RedirectResponse
      */
-    public function confirmBooking(Booking $booking): RedirectResponse // Mendefinisikan method 'confirmBooking' yang menerima parameter model Booking
+    public function confirmBooking(Booking $booking): RedirectResponse // Method ini mengembalikan RedirectResponse.
     {
-        $booking->status = 'confirmed';  // Mengubah nilai properti/kolom 'status' pada objek booking tersebut menjadi 'confirmed'
-        $booking->save();                // Menyimpan perubahan data tersebut ke dalam database (melakukan query UPDATE)
+        // Mengubah properti status pada objek booking yang dipilih menjadi 'confirmed'.
+        $booking->status = 'confirmed';
 
-        return redirect()                // Memulai pembuatan respon redirect (pengalihan halaman)
-            ->route('admin.dashboard')   // Mengarahkan pengguna kembali ke route yang bernama 'admin.dashboard'
-            ->with('success', 'Status pesanan berhasil diubah menjadi Sudah Bayar (Confirmed).'); // Menyimpan pesan sukses ke dalam session flash (hanya muncul sekali) untuk notifikasi
+        // Menyimpan perubahan tersebut ke database (SQL UPDATE).
+        $booking->save();
+
+        // Mengembalikan admin ke halaman dashboard setelah sukses.
+        return redirect()
+            ->route('admin.dashboard') // Arahkan ke route admin dashboard.
+            ->with('success', 'Status pesanan berhasil diubah menjadi Sudah Bayar (Confirmed).'); // Kirim pesan notifikasi sukses (Flash Message).
     }
 }
